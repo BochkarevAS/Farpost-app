@@ -1,14 +1,16 @@
 <?php
 
 define('ROOT', __DIR__);
-require_once(ROOT . '/src/Classes/Routes.php');
+require_once(ROOT . '/app/Router.php');
+require_once(ROOT . '/app/Db.php');
+require_once(ROOT . '/Classes/Component/User.php');
 
-$routes = new Routes();
+$routes = new Router();
 $routes->getRoutes();
 
-
-
-
+//if ($_POST['send_email']) {
+//    require_once(ROOT . '/src/send_email.php');
+//}
 
 
 //function get() {

@@ -1,12 +1,23 @@
 <?php
 
+session_start();
+
 define('ROOT', __DIR__);
 require_once(ROOT . '/app/Router.php');
 require_once(ROOT . '/app/Db.php');
 require_once(ROOT . '/Classes/Component/User.php');
+require_once(ROOT . '/Classes/Component/Image.php');
 
 $routes = new Router();
 $routes->getRoutes();
+
+?>
+
+<a href="/user/registration">Регестрация</a>
+<a href="/user/login">Вход</a>
+<a href="/user/logout">Выход</a>
+
+<?php
 
 //if ($_POST['send_email']) {
 //    require_once(ROOT . '/src/send_email.php');

@@ -1,7 +1,6 @@
 
 <h1>Регестрация</h1>
 
-
 <?php if (isset($errors) && is_array($errors)) : ?>
     <ul>
         <?php  foreach ($errors as $error) : ?>
@@ -11,7 +10,6 @@
 <?php endif; ?>
 
 <form action="" method="POST">
-
     <table>
         <thead></thead>
         <tbody>
@@ -30,5 +28,4 @@
             </tr>
         </tbody>
     </table>
-
 </form>

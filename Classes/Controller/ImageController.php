@@ -4,15 +4,19 @@ class ImageController {
 
     public function actionIndex() {
 
-        User::checkAuth();
+        $uid = User::checkAuth();
+        $images = Image::getImage($uid);
 
-
-
-//        if ($_POST['submit']) {
-//            Image::insertImage();
-//        }
+//        var_dump($images);
+//        die;
 
         require_once(ROOT . '/Resources/views/site/image.php');
+    }
+
+    public function actionImg() {
+
+        $uid = User::checkAuth();
+        Image::insertImage($uid);
 
     }
 

@@ -11,17 +11,7 @@ require_once(ROOT . '/Classes/Component/Image.php');
 $routes = new Router();
 $routes->getRoutes();
 
-?>
-
-<a href="/user/registration">Регестрация</a>
-<a href="/user/login">Вход</a>
-<a href="/user/logout">Выход</a>
-
-<?php
-
-//if ($_POST['send_email']) {
-//    require_once(ROOT . '/src/send_email.php');
-//}
+require_once(ROOT . '/Resources/views/site/header.php');
 
 
 //function get() {

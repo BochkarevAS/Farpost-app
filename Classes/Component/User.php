@@ -14,7 +14,7 @@ class User {
 
         $uid = $result->fetch();
 
-        User::auth($uid['id']);
+        $_SESSION['user'] = $uid['id'];
     }
 
     public static function login($password, $email) {
@@ -30,14 +30,11 @@ class User {
         $uid = $result->fetch();
 
         if ($uid) {
-            return $uid['id'];
+            $_SESSION['user'] = $uid['id'];
+            return true;
         }
 
         return false;
-    }
-
-    public static function auth($uid) {
-        $_SESSION['user'] = $uid;
     }
 
     public static function checkAuth() {
@@ -48,15 +45,6 @@ class User {
 
         header('Location: /user/registration');
         die();
-    }
-
-    public static function isAuth() {
-
-        if (isset($_SESSION['user'])) {
-            return true;
-        }
-
-        return false;
     }
 
     public static function checkEmail($email) {

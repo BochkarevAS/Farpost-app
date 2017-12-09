@@ -2,7 +2,7 @@
 
 <body>
 
-    <?php if (User::isAuth()) : ?>
+    <?php if (isset($_SESSION['user'])) : ?>
         <a href="/user/logout">Выход</a>
     <?php else : ?>
         <a href="/user/registration">Регестрация</a>

@@ -55,12 +55,9 @@ class UserController {
                 $errors[] = 'Email или пароль существует !!!';
             }
 
-            $uid = User::login($password, $email);
-
-            if ($uid == false) {
+            if (!User::login($password, $email)) {
                 $errors[] = "Не верный логин или пароль !!!";
             } else {
-                User::login($password, $email);
                 header('Location: /user/image');
             }
         }

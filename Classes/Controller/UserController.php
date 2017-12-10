@@ -11,10 +11,10 @@ class UserController {
     public function actionRegistration() {
         $errors = false;
 
-//        if (User::checkAuth()) {
-//            header('Location: /user/image');
-//            die();
-//        }
+        if (isset($_SESSION['user'])) {
+            header('Location: /user/image');
+            die();
+        }
 
         if (isset($_POST['submit'])) {
 
@@ -47,10 +47,10 @@ class UserController {
     public function actionLogin() {
         $errors = false;
 
-//        if (User::checkAuth()) {
-//            header('Location: /user/image');
-//            die();
-//        }
+        if (isset($_SESSION['user'])) {
+            header('Location: /user/image');
+            die();
+        }
 
         if (isset($_POST['submit'])) {
 

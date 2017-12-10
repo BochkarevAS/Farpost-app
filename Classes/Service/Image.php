@@ -5,7 +5,7 @@ class Image {
     public static function getImage($uid) {
         $db = Db::getConnection();
 
-        $sql = "SELECT img, added_by, date FROM image WHERE added_by = :added_by";
+        $sql = "SELECT id, img, added_by, date FROM image WHERE added_by = :added_by";
         $result = $db->prepare($sql);
 
         $result->bindParam('added_by', $uid, PDO::PARAM_STR);
@@ -14,7 +14,20 @@ class Image {
         return $result->fetchAll();
     }
 
-    public static function insertImage($uid = 1) {
+    public static function showImage($id) {
+        $db = Db::getConnection();
+
+        $sql = "SELECT img FROM image WHERE id = :id";
+        $result = $db->prepare($sql);
+
+        $result->bindParam('id', $id, PDO::PARAM_STR);
+        $result->execute();
+        $img = $result->fetchAll();
+
+        return $img['img'];
+    }
+
+    public static function insertImage($uid) {
         $db = Db::getConnection();
 
         $file = $_FILES['file'];
@@ -41,7 +54,7 @@ class Image {
 
         if (move_uploaded_file($file['tmp_name'], $uploaddir . $uploadfile)) {
 
-            $sql = "INSERT INTO image (img, added_by) VALUES (:img, :added_by) RETURNING img";
+            $sql = "INSERT INTO image (img, added_by) VALUES (:img, :added_by) RETURNING id, img";
             $result = $db->prepare($sql);
 
             $result->bindParam('img', $uploadfile, PDO::PARAM_STR);

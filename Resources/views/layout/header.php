@@ -1,5 +1,8 @@
 <html>
 
+<head>
+</head>
+
 <body>
 
     <?php if (isset($_SESSION['user'])) : ?>
@@ -8,7 +11,3 @@
         <a href="/user/registration">Регестрация</a>
         <a href="/user/login">Вход</a>
     <?php endif; ?>
-
-</body>
-
-</html>

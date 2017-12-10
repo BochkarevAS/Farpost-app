@@ -1,3 +1,4 @@
+<?php require_once(ROOT . '/Resources/views/layout/header.php'); ?>
 
 <h1>Авторизация</h1>
 
@@ -10,24 +11,23 @@
 <?php endif; ?>
 
 <form action="" method="POST">
-
     <table>
-        <thead></thead>
         <tbody>
-        <tr>
-            <td>email:</td>
-            <td><input type="email" name="email"></td>
-        </tr>
-        <tr>
-            <td>Пароль:</td>
-            <td><input type="password" name="password"></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" name="submit" value="Войти">
-            </td>
-        </tr>
+            <tr>
+                <td>email:</td>
+                <td><input type="email" name="email"></td>
+            </tr>
+            <tr>
+                <td>Пароль:</td>
+                <td><input type="password" name="password"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" name="submit" value="Войти">
+                </td>
+            </tr>
         </tbody>
     </table>
-
 </form>
+
+<?php require_once(ROOT . '/Resources/views/layout/footer.php'); ?>

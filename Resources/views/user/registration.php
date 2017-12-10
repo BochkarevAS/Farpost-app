@@ -1,3 +1,4 @@
+<?php require_once(ROOT . '/Resources/views/layout/header.php'); ?>
 
 <h1>Регестрация</h1>
 
@@ -11,7 +12,6 @@
 
 <form action="" method="POST">
     <table>
-        <thead></thead>
         <tbody>
             <tr>
                 <td>email:</td>
@@ -29,3 +29,5 @@
         </tbody>
     </table>
 </form>
+
+<?php require_once(ROOT . '/Resources/views/layout/footer.php'); ?>

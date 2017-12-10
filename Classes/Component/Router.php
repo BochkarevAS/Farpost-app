@@ -5,7 +5,7 @@ class Router {
     private $routes;
 
     public function __construct() {
-        $this->routes = include(ROOT . '/app/routes.php');
+        $this->routes = include(ROOT . '/config/routes.php');
     }
 
     private function getUri() {
@@ -22,7 +22,8 @@ class Router {
 
             if (preg_match("~$route~", $uri)) {
 
-                $segments = explode('/', $path);
+                $pattern = preg_replace("~$route~", $path, $uri);
+                $segments = explode('/', $pattern);
                 $controllerName = ucfirst(array_shift($segments)) . "Controller";
 
                 $action = 'action' . ucfirst(array_shift($segments));
@@ -33,7 +34,7 @@ class Router {
                 }
 
                 $controllerObject = new $controllerName;
-                $controllerObject->$action();
+                call_user_func_array([$controllerObject, $action], $segments);
             }
         }
     }

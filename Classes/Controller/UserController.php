@@ -3,7 +3,6 @@
 class UserController {
 
     public function actionRegistration() {
-
         $errors = false;
 
         if (isset($_POST['submit'])) {
@@ -35,7 +34,6 @@ class UserController {
     }
 
     public function actionLogin() {
-
         $errors = false;
 
         if (isset($_POST['submit'])) {
@@ -68,9 +66,7 @@ class UserController {
     }
 
     public function actionLogout() {
-        session_start();
         unset($_SESSION['user']);
-
         header('Location: /user/login');
     }
 }

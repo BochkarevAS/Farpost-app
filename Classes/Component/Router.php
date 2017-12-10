@@ -21,9 +21,9 @@ class Router {
         foreach ($this->routes as $route => $path) {
 
             if (preg_match("~$route~", $uri)) {
-
                 $pattern = preg_replace("~$route~", $path, $uri);
                 $segments = explode('/', $pattern);
+
                 $controllerName = ucfirst(array_shift($segments)) . "Controller";
 
                 $action = 'action' . ucfirst(array_shift($segments));

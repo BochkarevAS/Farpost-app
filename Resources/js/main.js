@@ -26,11 +26,15 @@ window.onload = function () {
         xhr.onload = xhr.onerror = function() {
 
             if (this.status == 200) {
+
+                console.log(xhr.responseText);
+
                 var data = JSON.parse(xhr.responseText);
                 var ul = document.getElementById('image');
                 var li = document.createElement('LI');
                 var a = document.createElement('A');
                 a.href = 'show/' + data['id'];
+                a.target = '_blank';
                 a.textContent = data['img'];
 
                 li.appendChild(a);
@@ -42,7 +46,7 @@ window.onload = function () {
             }
         };
 
-        xhr.open("POST", "user/img", true);
+        xhr.open("POST", "addAjaxImage", true);
         xhr.send(formData);
     }
 };

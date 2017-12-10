@@ -22,7 +22,7 @@ class Image {
 
         $result->bindParam('id', $id, PDO::PARAM_STR);
         $result->execute();
-        $img = $result->fetchAll();
+        $img = $result->fetch();
 
         return $img['img'];
     }

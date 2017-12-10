@@ -6,5 +6,6 @@
         'user/logout' => 'user/logout',
         'user/image' => 'image/index',
         'user/addAjaxImage' => 'image/addAjaxImage',
-        'user/show/([0-9]+)' => 'image/show/$1'
+        'user/show/([0-9]+)' => 'image/show/$1',
+        '' => 'user/index'
     ];

@@ -6,4 +6,4 @@ define('ROOT', __DIR__);
 require_once(ROOT . '/config/autoload.php');
 
 $routes = new Router();
-$routes->getRoutes();
+$routes->run();

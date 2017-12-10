@@ -2,13 +2,19 @@
 
 class UserController {
 
+    public function actionIndex() {
+        require_once(ROOT . '/Resources/views/user/main.php');
+
+        return true;
+    }
+
     public function actionRegistration() {
         $errors = false;
 
-        if (User::checkAuth()) {
-            header('Location: /user/image');
-            die();
-        }
+//        if (User::checkAuth()) {
+//            header('Location: /user/image');
+//            die();
+//        }
 
         if (isset($_POST['submit'])) {
 
@@ -41,10 +47,10 @@ class UserController {
     public function actionLogin() {
         $errors = false;
 
-        if (User::checkAuth()) {
-            header('Location: /user/image');
-            die();
-        }
+//        if (User::checkAuth()) {
+//            header('Location: /user/image');
+//            die();
+//        }
 
         if (isset($_POST['submit'])) {
 

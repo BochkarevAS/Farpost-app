@@ -15,22 +15,15 @@ class Router {
         }
     }
 
-    public function getRoutes() {
+    public function run() {
         $uri = $this->getUri();
 
         foreach ($this->routes as $route => $path) {
 
             if (preg_match("~$route~", $uri)) {
+
                 $pattern = preg_replace("~$route~", $path, $uri);
                 $segments = explode('/', $pattern);
-
-
-//                echo "<br>" . $route;
-//                echo "<br>" . $path;
-//                echo "<br>" . $uri . "<br>";
-//
-//                var_dump($pattern);
-                //die;
 
                 $controllerName = ucfirst(array_shift($segments)) . "Controller";
 
@@ -43,6 +36,8 @@ class Router {
 
                 $controllerObject = new $controllerName;
                 call_user_func_array([$controllerObject, $action], $segments);
+
+                return true;
             }
         }
     }

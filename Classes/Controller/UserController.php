@@ -5,6 +5,11 @@ class UserController {
     public function actionRegistration() {
         $errors = false;
 
+        if (User::checkAuth()) {
+            header('Location: /user/image');
+            die();
+        }
+
         if (isset($_POST['submit'])) {
 
             $email = $_POST['email'];
@@ -35,6 +40,11 @@ class UserController {
 
     public function actionLogin() {
         $errors = false;
+
+        if (User::checkAuth()) {
+            header('Location: /user/image');
+            die();
+        }
 
         if (isset($_POST['submit'])) {
 

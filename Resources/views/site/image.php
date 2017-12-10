@@ -1,6 +1,6 @@
 <?php require_once(ROOT . '/Resources/views/layout/header.php'); ?>
 
-<form name="upload">
+<form id="loadFile">
     <input type="file" name="img">
     <input type="submit" name="submit" value="Загрузить">
 </form>

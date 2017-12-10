@@ -1,17 +1,21 @@
 window.onload = function () {
 
+    var loadFile = document.getElementById('loadFile');
+
     function log(html) {
         document.getElementById('log').innerHTML = html;
     }
 
-    document.forms.upload.onsubmit = function() {
-        var file = this.elements.img.files[0];
+    if (loadFile) {
+        document.getElementById('loadFile').onsubmit = function () {
+            var file = this.elements.img.files[0];
 
-        if (file) {
-            upload(file);
-        }
-        return false;
-    };
+            if (file) {
+                upload(file);
+            }
+            return false;
+        };
+    }
 
     function upload(file) {
 

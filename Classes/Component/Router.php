@@ -24,6 +24,14 @@ class Router {
                 $pattern = preg_replace("~$route~", $path, $uri);
                 $segments = explode('/', $pattern);
 
+
+//                echo "<br>" . $route;
+//                echo "<br>" . $path;
+//                echo "<br>" . $uri . "<br>";
+//
+//                var_dump($pattern);
+                //die;
+
                 $controllerName = ucfirst(array_shift($segments)) . "Controller";
 
                 $action = 'action' . ucfirst(array_shift($segments));

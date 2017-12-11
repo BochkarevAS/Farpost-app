@@ -17,7 +17,10 @@ class ImageController {
 
     public function actionAddAjaxImage() {
         $uid = $this->image->checkAuth();
-        $this->image->insertImage($uid);
+        $img = $this->image->insertImage($uid);
+
+        echo json_encode($img);
+        die();
     }
 
     public function actionShow($id) {

@@ -9,8 +9,10 @@
 
 <ul id="image">
     <?php foreach ($images as $image) : ?>
-        <li>
-            <a href="show/<?= $image['id']?>" target="_blank"><?= $image['img'] ?></a>
+        <li style="list-style-type: none">
+            <a href="show/<?= $image['id']?>" target="_blank">
+                <img src="/UploadedFiles/<?= $image['img'] ?>" width="100" height="100"">
+            </a>
         </li>
     <?php endforeach; ?>
 </ul>

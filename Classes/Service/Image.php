@@ -41,7 +41,6 @@ class Image {
         $db = Db::getConnection();
 
         $file = $_FILES['file'];
-
         $uploaddir = dirname($_SERVER['SCRIPT_FILENAME']) . "/UploadedFiles/";
 
         $year = date("Y");
@@ -51,9 +50,11 @@ class Image {
         if (!file_exists("$uploaddir$year/")) {
             mkdir("$uploaddir$year/", 0777);
         }
+
         if (!file_exists("$uploaddir/$year/$month/")) {
             mkdir("$uploaddir$year/$month/", 0777);
         }
+
         if (!file_exists("$uploaddir$year/$month/$day/")) {
             mkdir("$uploaddir$year/$month/$day/", 0777);
         }
@@ -73,8 +74,7 @@ class Image {
             $img = $result->fetch();
         }
 
-        echo json_encode($img);
-        die();
+        return $img;
     }
 
     private function makeSeed() {

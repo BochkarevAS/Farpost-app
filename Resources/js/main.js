@@ -36,11 +36,18 @@ window.onload = function () {
                 var data = JSON.parse(xhr.responseText);
                 var ul = document.getElementById('image');
                 var li = document.createElement('LI');
+                li.style.cssText = "list-style-type: none";
+
+                var img = document.createElement('img');
+                img.src = '/UploadedFiles/' + data['img'];
+                img.width = 100;
+                img.height = 100;
+
                 var a = document.createElement('A');
                 a.href = 'show/' + data['id'];
                 a.target = '_blank';
-                a.textContent = data['img'];
 
+                a.appendChild(img);
                 li.appendChild(a);
                 ul.appendChild(li);
 

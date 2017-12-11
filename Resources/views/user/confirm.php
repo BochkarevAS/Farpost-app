@@ -1,13 +1,19 @@
 <?php require_once(ROOT . '/Resources/views/layout/header.php'); ?>
 
-<h1>Подтвердить email</h1>
+<h1>Подтвердите email</h1>
+
+<?php if ($error != false) : ?>
+    <div>
+        <?= $error ?>
+    </div>
+<?php endif; ?>
 
 <form action="" method="POST">
     <table>
         <tbody>
         <tr>
             <td>Код:</td>
-            <td><input type="email" name="email"></td>
+            <td><input type="text" name="code"></td>
         </tr>
         <tr>
             <td>

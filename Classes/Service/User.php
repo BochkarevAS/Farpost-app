@@ -5,36 +5,36 @@ class User {
     public static function registration($password, $email) {
         $db = Db::getConnection();
 
-        $sql = "INSERT INTO users (password, email) VALUES (:password, :email) RETURNING id";
+        $email = 'snake-vl@mail.ru';
+        $time = new \DateTimeImmutable('now', new \DateTimeZone('+0000'));
+
+        $hash = password_hash(User::createSecretString($email, $password, $time), PASSWORD_DEFAULT);
+        $code = base64_encode(json_encode(['email' => $email, 'time' => $time->format('U'), 'hash' => $hash]));
+
+        $sql = "INSERT INTO users (password, email, code) VALUES (:password, :email, :code)";
         $result = $db->prepare($sql);
 
         $result->bindParam('email', $email, PDO::PARAM_STR);
         $result->bindParam('password', $password, PDO::PARAM_STR);
+        $result->bindParam('code', $code, PDO::PARAM_STR);
         $result->execute();
 
-        $uid = $result->fetch();
-
-        $_SESSION['user'] = $uid['id'];
+        User::sendEmail($email, $code);
     }
 
     public static function login($password, $email) {
         $db = Db::getConnection();
 
-        $sql = "SELECT id FROM users WHERE email = :email AND password = :password";
+        $sql = "SELECT code FROM users WHERE email = :email AND password = :password";
         $result = $db->prepare($sql);
 
         $result->bindParam('email', $email, PDO::PARAM_STR);
         $result->bindParam('password', $password, PDO::PARAM_STR);
         $result->execute();
 
-        $uid = $result->fetch();
+        $code = $result->fetch();
 
-        if ($uid) {
-            $_SESSION['user'] = $uid['id'];
-            return true;
-        }
-
-        return false;
+        return User::sendEmail($email, $code['code']);
     }
 
     public static function checkAuth() {
@@ -82,24 +82,27 @@ class User {
         return true;
     }
 
-    public static function sendEmail($email) {
-        $email = 'snake-vl@mail.ru';
-        $message = "Текст:";
-        $subject = 'Код для подтверждения';
+    public static function confirm($code) {
+        $db = Db::getConnection();
 
+        $sql = "SELECT id FROM users WHERE code = :code";
+        $result = $db->prepare($sql);
 
+        $result->bindParam('code', $code, PDO::PARAM_STR);
+        $result->execute();
 
+        $uid = $result->fetch();
 
-        if (mail($email, $subject, $message, "From: snake-vl@mail.ru")) {
-            echo "<h3>Сообщение отправлено</h3>";
-            $result = true;
-     	} else {
-           echo "<h3>При отправке сообщения возникла ошибка</h3>";
-            $result = false;
+        if ($uid) {
+            $_SESSION['user'] = $uid['id'];
+            return true;
         }
 
+        return false;
+    }
 
-
+    public static function sendEmail($email, $message) {
+        $result = mail($email, "Подтверждение", $message, "From: $email");
         return $result;
     }
 

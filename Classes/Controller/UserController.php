@@ -4,11 +4,28 @@ class UserController {
 
     public function actionIndex() {
         require_once(ROOT . '/Resources/views/user/main.php');
-
         return true;
     }
 
     public function actionConfirm() {
+        $error = false;
+
+        if (isset($_SESSION['user'])) {
+            header('Location: /user/image');
+            die();
+        }
+
+        if (isset($_POST['submit'])) {
+            $code = $_POST['code'];
+
+            if (!User::confirm($code)) {
+                $error = 'Не верный КОД !!!';
+            } else {
+                header('Location: /user/image');
+                die();
+            }
+        }
+
         require_once(ROOT . '/Resources/views/user/confirm.php');
 
         return true;
@@ -39,27 +56,9 @@ class UserController {
                 $errors[] = 'Email или пароль существует !!!';
             }
 
-            $email = 'snake-vl@mail.ru';
-            $password = (string)12345;
-            $time = new \DateTimeImmutable('now', new \DateTimeZone('+0000'));
-
-          // $res = User::createSecretString($email, $password, $time);
-
-            $hash = password_hash(User::createSecretString($email, $password, $time), PASSWORD_DEFAULT);
-            echo build_query(['code' => base64_encode(json_encode(['email' => $email, 'time' => $time->format('U'), 'hash' => $hash]))]);
-
-            if (!User::sendEmail($email)) {
-                $errors[] = 'Email послать не удалось !!!';
-            }  else {
-                header('Location: /user/confirm');
-                die;
-            }
-
-
-
             if ($errors == false) {
                 User::registration($password, $email);
-                header('Location: /user/image');
+                header('Location: /user/confirm');
             }
         }
 
@@ -96,7 +95,8 @@ class UserController {
             if (!User::login($password, $email)) {
                 $errors[] = "Не верный логин или пароль !!!";
             } else {
-                header('Location: /user/image');
+                header('Location: /user/confirm');
+                die();
             }
         }
 

@@ -2,19 +2,19 @@
 
 class Image {
 
-    public static function getImage($uid) {
+    public function getImage($uid) {
         $db = Db::getConnection();
 
-        $sql = "SELECT id, img, added_by, date FROM image WHERE added_by = :added_by";
+        $sql = "SELECT id, img, uid, date FROM image WHERE uid = :uid";
         $result = $db->prepare($sql);
 
-        $result->bindParam('added_by', $uid, PDO::PARAM_STR);
+        $result->bindParam('uid', $uid, PDO::PARAM_STR);
         $result->execute();
 
         return $result->fetchAll();
     }
 
-    public static function showImage($id) {
+    public function showImage($id) {
         $db = Db::getConnection();
 
         $sql = "SELECT img FROM image WHERE id = :id";
@@ -27,7 +27,17 @@ class Image {
         return $img['img'];
     }
 
-    public static function insertImage($uid) {
+    public function checkAuth() {
+
+        if (isset($_SESSION['user'])) {
+            return $_SESSION['user'];
+        }
+
+        header('Location: /user/registration');
+        die();
+    }
+
+    public function insertImage($uid) {
         $db = Db::getConnection();
 
         $file = $_FILES['file'];
@@ -50,15 +60,14 @@ class Image {
 
         $info = pathinfo($file['name']);
         $ext = empty($info['extension']) ? "" : "." . $info['extension'];
-        $uploadfile = "$year/$month/$day/" . Image::makeSeed() . $ext;
+        $uploadfile = "$year/$month/$day/" . $this->makeSeed() . $ext;
 
         if (move_uploaded_file($file['tmp_name'], $uploaddir . $uploadfile)) {
-
-            $sql = "INSERT INTO image (img, added_by) VALUES (:img, :added_by) RETURNING id, img";
+            $sql = "INSERT INTO image (img, uid) VALUES (:img, :uid) RETURNING id, img";
             $result = $db->prepare($sql);
 
             $result->bindParam('img', $uploadfile, PDO::PARAM_STR);
-            $result->bindParam('added_by', $uid, PDO::PARAM_STR);
+            $result->bindParam('uid', $uid, PDO::PARAM_STR);
             $result->execute();
 
             $img = $result->fetch();
@@ -68,7 +77,7 @@ class Image {
         die();
     }
 
-    public static function makeSeed() {
+    private function makeSeed() {
         list($usec, $sec) = explode(' ', microtime());
         return $sec . (int)($usec * 100000);
     }

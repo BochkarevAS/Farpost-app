@@ -2,6 +2,12 @@
 
 class UserController {
 
+    private $user;
+
+    public function __construct() {
+        $this->user = new User();
+    }
+
     public function actionIndex() {
         require_once(ROOT . '/Resources/views/user/main.php');
         return true;
@@ -18,7 +24,7 @@ class UserController {
         if (isset($_POST['submit'])) {
             $code = $_POST['code'];
 
-            if (!User::confirm($code)) {
+            if (!$this->user->confirm($code)) {
                 $error = 'Не верный КОД !!!';
             } else {
                 header('Location: /user/image');
@@ -40,24 +46,13 @@ class UserController {
         }
 
         if (isset($_POST['submit'])) {
-
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            if (!User::checkEmail($email)) {
-                $errors[] = 'Не корректный Email !!!';
-            }
-
-            if (!User::checkPassword($password)) {
-                $errors[] = 'Пароль не может быть меньше трёх символов !!!';
-            }
-
-            if (!User::checkExist($email, $password)) {
-                $errors[] = 'Email или пароль существует !!!';
-            }
+            $errors = $this->user->valid($email, $password);
 
             if ($errors == false) {
-                User::registration($password, $email);
+                $this->user->registration($password, $email);
                 header('Location: /user/confirm');
             }
         }
@@ -76,23 +71,16 @@ class UserController {
         }
 
         if (isset($_POST['submit'])) {
-
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            if (!User::checkEmail($email)) {
-                $errors[] = 'Не корректный Email !!!';
-            }
+            $errors = $this->user->valid($email, $password);
 
-            if (!User::checkPassword($password)) {
-                $errors[] = 'Пароль не может быть меньше трёх символов !!!';
-            }
-
-            if (!User::checkExist($email, $password)) {
+            if (!$this->user->checkExistUser($email)) {
                 $errors[] = 'Email или пароль существует !!!';
             }
 
-            if (!User::login($password, $email)) {
+            if (!$this->user->login($password, $email)) {
                 $errors[] = "Не верный логин или пароль !!!";
             } else {
                 header('Location: /user/confirm');

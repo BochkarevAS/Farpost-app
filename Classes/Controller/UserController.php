@@ -8,6 +8,12 @@ class UserController {
         return true;
     }
 
+    public function actionConfirm() {
+        require_once(ROOT . '/Resources/views/user/confirm.php');
+
+        return true;
+    }
+
     public function actionRegistration() {
         $errors = false;
 
@@ -32,6 +38,24 @@ class UserController {
             if (!User::checkExist($email, $password)) {
                 $errors[] = 'Email или пароль существует !!!';
             }
+
+            $email = 'snake-vl@mail.ru';
+            $password = (string)12345;
+            $time = new \DateTimeImmutable('now', new \DateTimeZone('+0000'));
+
+          // $res = User::createSecretString($email, $password, $time);
+
+            $hash = password_hash(User::createSecretString($email, $password, $time), PASSWORD_DEFAULT);
+            echo build_query(['code' => base64_encode(json_encode(['email' => $email, 'time' => $time->format('U'), 'hash' => $hash]))]);
+
+            if (!User::sendEmail($email)) {
+                $errors[] = 'Email послать не удалось !!!';
+            }  else {
+                header('Location: /user/confirm');
+                die;
+            }
+
+
 
             if ($errors == false) {
                 User::registration($password, $email);

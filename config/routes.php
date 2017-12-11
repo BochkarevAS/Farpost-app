@@ -3,6 +3,7 @@
     return [
         'user/registration' => 'user/registration',
         'user/login' => 'user/login',
+        'user/confirm' => 'user/confirm',
         'user/logout' => 'user/logout',
         'user/image' => 'image/index',
         'user/addAjaxImage' => 'image/addAjaxImage',

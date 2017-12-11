@@ -30,9 +30,6 @@ window.onload = function () {
         xhr.onload = xhr.onerror = function() {
 
             if (this.status == 200) {
-
-                console.log(xhr.responseText);
-
                 var data = JSON.parse(xhr.responseText);
                 var ul = document.getElementById('image');
                 var li = document.createElement('LI');

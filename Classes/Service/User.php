@@ -81,4 +81,30 @@ class User {
 
         return true;
     }
+
+    public static function sendEmail($email) {
+        $email = 'snake-vl@mail.ru';
+        $message = "Текст:";
+        $subject = 'Код для подтверждения';
+
+
+
+
+        if (mail($email, $subject, $message, "From: snake-vl@mail.ru")) {
+            echo "<h3>Сообщение отправлено</h3>";
+            $result = true;
+     	} else {
+           echo "<h3>При отправке сообщения возникла ошибка</h3>";
+            $result = false;
+        }
+
+
+
+        return $result;
+    }
+
+    public static function createSecretString($email, $password, $time) {
+        return $email . $password . $time->format('YmdHis');
+    }
+
 }

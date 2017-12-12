@@ -24,16 +24,21 @@ class User {
     public function login($password, $email) {
         $db = Db::getConnection();
 
-        $sql = "SELECT code FROM users WHERE email = :email AND password = :password";
+        $sql = "SELECT id FROM users WHERE email = :email AND password = :password";
         $result = $db->prepare($sql);
 
         $result->bindParam('email', $email, PDO::PARAM_STR);
         $result->bindParam('password', $password, PDO::PARAM_STR);
         $result->execute();
 
-        $code = $result->fetch();
+        $uid = $result->fetch();
 
-        return $this->sendEmail($email, $code['code']);
+        if ($uid) {
+            $_SESSION['user'] = $uid['id'];
+            return true;
+        }
+
+        return false;
     }
 
     public function valid($email, $password) {

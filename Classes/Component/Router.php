@@ -35,7 +35,8 @@ class Router {
                 }
 
                 $controllerObject = new $controllerName;
-                $controllerObject->{$action}($segments);
+                call_user_func_array([$controllerObject, $action], $segments);
+
                 return true;
             }
         }

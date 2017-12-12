@@ -64,25 +64,16 @@ class Image {
         $uploadfile = "$year/$month/$day/" . $this->makeSeed() . $ext;
 
         if (move_uploaded_file($file['tmp_name'], $uploaddir . $uploadfile)) {
-//            Писал в начале под PostgreSQL
-//            $sql = "INSERT INTO image (img, uid) VALUES (:img, :uid) RETURNING id, img";
 
-            $sql = "INSERT INTO image (img, uid) VALUES (:img, :uid)";
+            $sql = "INSERT INTO image (img, uid) VALUES (:img, :uid) RETURNING id, img";
             $result = $db->prepare($sql);
 
             $result->bindParam('img', $uploadfile, PDO::PARAM_STR);
             $result->bindParam('uid', $uid, PDO::PARAM_STR);
             $result->execute();
+
+            $img = $result->fetch();
         }
-
-        $sql = "SELECT img FROM image WHERE img = :img AND uid = :uid";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('img', $uploadfile, PDO::PARAM_STR);
-        $result->bindParam('uid', $uid, PDO::PARAM_STR);
-        $result->execute();
-
-        $img = $result->fetch();
 
         return $img;
     }

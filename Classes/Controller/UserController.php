@@ -83,7 +83,7 @@ class UserController {
             if (!$this->user->login($password, $email)) {
                 $errors[] = "Не верный логин или пароль !!!";
             } else {
-                header('Location: /user/confirm');
+                header('Location: /user/image');
                 die();
             }
         }

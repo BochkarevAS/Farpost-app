@@ -5,7 +5,6 @@ class User {
     public function registration($password, $email) {
         $db = Db::getConnection();
 
-        $email = 'snake-vl@mail.ru';
         $time = new \DateTimeImmutable('now', new \DateTimeZone('+0000'));
 
         $hash = password_hash($this->createSecretString($email, $password, $time), PASSWORD_DEFAULT);

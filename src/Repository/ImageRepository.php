@@ -13,33 +13,21 @@ class ImageRepository {
     }
 
     public function getImage($uid) {
-        $db = $this->db->getConnection();
-
         $sql = "SELECT id, img, uid, date FROM image WHERE uid = :uid";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('uid', $uid, \PDO::PARAM_STR);
-        $result->execute();
+        $result = $this->db->query($sql, ['uid' => $uid]);
 
         return $result->fetchAll();
     }
 
     public function showImage($id) {
-        $db = $this->db->getConnection();
-
         $sql = "SELECT img FROM image WHERE id = :id";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('id', $id, \PDO::PARAM_STR);
-        $result->execute();
+        $result = $this->db->query($sql, ['id' => $id]);
         $img = $result->fetch();
 
         return $img['img'];
     }
 
     public function setImage($uid, $makeSeed) {
-        $db = $this->db->getConnection();
-
         $file = $_FILES['file'];
         $uploaddir = dirname($_SERVER['SCRIPT_FILENAME']) . "/UploadedFiles/";
 
@@ -65,11 +53,10 @@ class ImageRepository {
 
         if (move_uploaded_file($file['tmp_name'], $uploaddir . $uploadfile)) {
             $sql = "INSERT INTO image (img, uid) VALUES (:img, :uid) RETURNING id, img";
-            $result = $db->prepare($sql);
-
-            $result->bindParam('img', $uploadfile, \PDO::PARAM_STR);
-            $result->bindParam('uid', $uid, \PDO::PARAM_STR);
-            $result->execute();
+            $result = $this->db->query($sql, [
+                'img' => $uploadfile,
+                'uid' => $uid
+            ]);
 
             $img = $result->fetch();
         }

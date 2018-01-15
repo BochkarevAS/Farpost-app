@@ -10,7 +10,14 @@ class Db {
         $this->connection = new \PDO("pgsql:dbname=$dbname;host=$host", $user, $password);
     }
 
-    public function getConnection() {
+    private function getConnection() {
         return $this->connection;
+    }
+
+    public function query($sql, $params = []) {
+        $db = $this->getConnection();
+        $result = $db->prepare($sql);
+
+        return $result->execute($params);
     }
 }

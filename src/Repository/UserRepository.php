@@ -13,50 +13,34 @@ class UserRepository {
     }
 
     public function createUser($password, $email, $code) {
-        $db = $this->db->getConnection();
-
         $sql = "INSERT INTO users (password, email, code) VALUES (:password, :email, :code)";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('email', $email, \PDO::PARAM_STR);
-        $result->bindParam('password', $password, \PDO::PARAM_STR);
-        $result->bindParam('code', $code, \PDO::PARAM_STR);
-        $result->execute();
+        $this->db->query($sql, [
+            'email' => $email,
+            'password' => $password,
+            'code' => $code,
+        ]);
     }
 
     public function getLogin($password, $email) {
-        $db = $this->db->getConnection();
-
-        $sql = "SELECT id FROM users WHERE email = :email AND password = :password";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('email', $email, \PDO::PARAM_STR);
-        $result->bindParam('password', $password, \PDO::PARAM_STR);
-        $result->execute();
+        $sql = "INSERT INTO image (img, uid) VALUES (:img, :uid) RETURNING id, img";
+        $result = $this->db->query($sql, [
+            'email' => $email,
+            'password' => $password
+        ]);
 
         return $result->fetch();
     }
 
     public function searchUser($email) {
-        $db = $this->db->getConnection();
-
         $sql = "SELECT COUNT(*) FROM users WHERE email = :email";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('email', $email, \PDO::PARAM_STR);
-        $result->execute();
+        $result = $this->db->query($sql, ['email' => $email]);
 
         return $result->fetchColumn();
     }
 
     public function isConfirm($code) {
-        $db = $this->db->getConnection();
-
         $sql = "SELECT id FROM users WHERE code = :code";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('code', $code, \PDO::PARAM_STR);
-        $result->execute();
+        $result = $this->db->query($sql, ['code' => $code]);
 
         return $result->fetch();
     }

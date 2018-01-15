@@ -1,37 +1,29 @@
 <?php
 
-class User {
+namespace App\Service;
+
+use App\Repository\UserRepository;
+
+class UserService {
+
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository) {
+        $this->userRepository = $userRepository;
+    }
 
     public function registration($password, $email) {
-        $db = Db::getConnection();
-
         $time = new \DateTimeImmutable('now', new \DateTimeZone('+0000'));
 
         $hash = password_hash($this->createSecretString($email, $password, $time), PASSWORD_DEFAULT);
         $code = base64_encode(json_encode(['email' => $email, 'time' => $time->format('U'), 'hash' => $hash]));
 
-        $sql = "INSERT INTO users (password, email, code) VALUES (:password, :email, :code)";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('email', $email, PDO::PARAM_STR);
-        $result->bindParam('password', $password, PDO::PARAM_STR);
-        $result->bindParam('code', $code, PDO::PARAM_STR);
-        $result->execute();
-
+        $this->userRepository->createUser($password, $email, $code);
         $this->sendEmail($email, $code);
     }
 
     public function login($password, $email) {
-        $db = Db::getConnection();
-
-        $sql = "SELECT id FROM users WHERE email = :email AND password = :password";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('email', $email, PDO::PARAM_STR);
-        $result->bindParam('password', $password, PDO::PARAM_STR);
-        $result->execute();
-
-        $uid = $result->fetch();
+        $uid = $this->userRepository->getLogin($password, $email);
 
         if ($uid) {
             $_SESSION['user'] = $uid['id'];
@@ -56,31 +48,11 @@ class User {
     }
 
     public function checkExistUser($email) {
-        $db = Db::getConnection();
-
-        $sql = "SELECT COUNT(*) FROM users WHERE email = :email";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('email', $email, PDO::PARAM_STR);
-        $result->execute();
-
-        if ($result->fetchColumn()) {
-            return false;
-        }
-
-        return true;
+        return $this->userRepository->searchUser($email) ? false : true;
     }
 
     public function confirm($code) {
-        $db = Db::getConnection();
-
-        $sql = "SELECT id FROM users WHERE code = :code";
-        $result = $db->prepare($sql);
-
-        $result->bindParam('code', $code, PDO::PARAM_STR);
-        $result->execute();
-
-        $uid = $result->fetch();
+        $uid = $this->userRepository->isConfirm($code);
 
         if ($uid) {
             $_SESSION['user'] = $uid['id'];

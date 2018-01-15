@@ -1,10 +1,8 @@
-<?php require_once(ROOT . '/Resources/views/layout/header.php'); ?>
-
 <h1>Подтвердите email</h1>
 
-<?php if ($error != false) : ?>
+<?php if ($errors != false) : ?>
     <div>
-        <?= $error ?>
+        <?= $errors ?>
     </div>
 <?php endif; ?>
 
@@ -23,5 +21,3 @@
         </tbody>
     </table>
 </form>
-
-<?php require_once(ROOT . '/Resources/views/layout/footer.php'); ?>

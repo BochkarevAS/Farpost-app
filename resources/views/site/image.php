@@ -1,5 +1,3 @@
-<?php require_once(ROOT . '/Resources/views/layout/header.php'); ?>
-
 <form id="loadFile">
     <input type="file" name="img">
     <input type="submit" name="submit" value="Загрузить">
@@ -16,5 +14,3 @@
         </li>
     <?php endforeach; ?>
 </ul>
-
-<?php require_once(ROOT . '/Resources/views/layout/footer.php'); ?>

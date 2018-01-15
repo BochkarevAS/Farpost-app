@@ -1,10 +1,8 @@
-<?php require_once(ROOT . '/Resources/views/layout/header.php'); ?>
-
-<h1>Авторизация</h1>
+<h1>Регестрация</h1>
 
 <?php if (isset($errors) && is_array($errors)) : ?>
     <ul>
-        <?php  foreach ($errors as $error) : ?>
+        <?php foreach ($errors as $error) : ?>
             <li><?= $error ?></li>
         <?php endforeach; ?>
     </ul>
@@ -23,11 +21,9 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" name="submit" value="Войти">
+                    <input type="submit" name="submit" value="Регестрация">
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
-
-<?php require_once(ROOT . '/Resources/views/layout/footer.php'); ?>

@@ -8,13 +8,13 @@ return [
         return new \App\Controller\UserController($c->get(\App\Core\View::class), $c->get(\App\Service\UserService::class));
     },
     \App\Controller\ImageController::class => function($c) {
-        return new \App\Controller\ImageController($c->get(\App\Core\View::class), $c->get(\App\Service\ImageService::class));
+        return new \App\Controller\ImageController($c->get(\App\Core\View::class), $c->get(\App\Service\Image::class));
     },
     \App\Service\UserService::class => function($c) {
         return new \App\Service\UserService($c->get(\App\Repository\UserRepository::class));
     },
-    \App\Service\ImageService::class => function($c) {
-        return new \App\Service\ImageService($c->get(\App\Repository\ImageRepository::class));
+    \App\Service\Image::class => function($c) {
+        return new \App\Service\Image($c->get(\App\Repository\ImageRepository::class));
     },
     \App\Repository\UserRepository::class => function($c) {
         return new \App\Repository\UserRepository($c->get(\App\Core\Db::class));

@@ -2,16 +2,19 @@
 
 namespace App\Core;
 
-class View {
-
+class View
+{
     private $path = ROOT . '/resources/views/';
 
-    public function render($templateName, $data = [], $layoutName = 'layout/main') {
+    public function render($templateName, $data = [], $layoutName = 'layout/main')
+    {
         $data['content'] = $this->_render($templateName, $data);
+
         return $this->_render($layoutName, $data);
     }
 
-    protected function _render($templateName, $data = []) {
+    protected function _render($templateName, $data = [])
+    {
         try {
             ob_start();
             $this->protectedScope($this->path . $templateName . '.php', $data);
@@ -20,11 +23,14 @@ class View {
             ob_end_clean();
             throw $e;
         }
+
         return $output;
     }
 
-    protected function protectedScope($___templatePath, array $data) {
+    protected function protectedScope($___templatePath, array $data)
+    {
         extract($data);
+
         include $___templatePath;
     }
 }

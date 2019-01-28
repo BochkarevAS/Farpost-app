@@ -2,29 +2,33 @@
 
 namespace App\Controller;
 
-use App\Core\View;
-use App\Service\ImageService;
+use App\Core\Container;
+use App\Core\Controller;
+use App\Service\Image;
 
-class ImageController {
-
-    private $view;
+class ImageController extends Controller
+{
     private $imageService;
 
-    public function __construct(View $view, ImageService $imageService) {
-        $this->view = $view;
+    public function __construct(Container $container, Image $imageService)
+    {
         $this->imageService = $imageService;
+
+        parent::__construct($container);
     }
 
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $uid = $this->imageService->checkAuth();
         $images = $this->imageService->getImage($uid);
 
-        return $this->view->render('site/image', [
+        return $this->render('site/image', [
             'images' => $images
         ]);
     }
 
-    public function actionAddAjaxImage() {
+    public function actionAddAjaxImage()
+    {
         $uid = $this->imageService->checkAuth();
         $img = $this->imageService->insertImage($uid);
 
@@ -32,11 +36,12 @@ class ImageController {
         die();
     }
 
-    public function actionShow($path, $id) {
+    public function actionShow($path, $id)
+    {
         $this->imageService->checkAuth();
         $img = $this->imageService->showImage($id);
 
-        return $this->view->render('site/show', [
+        return $this->render('site/show', [
             'img' => $img
         ]);
     }

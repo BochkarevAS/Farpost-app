@@ -2,15 +2,17 @@
 
 namespace App\Core;
 
-class Kernel {
-
+class Kernel
+{
     protected $container;
 
-    function __construct(Container $container) {
+    function __construct(Container $container)
+    {
         $this->container = $container;
     }
 
-    public static function classLoader($class) {
+    public static function classLoader($class)
+    {
         $class = strtr($class, [
             'App' => 'src',
             '\\' => DIRECTORY_SEPARATOR
@@ -23,8 +25,10 @@ class Kernel {
         }
     }
 
-    public function run() {
+    public function run()
+    {
         $routes = $this->container->get(Router::class);
+
         echo $routes->run();
     }
 }

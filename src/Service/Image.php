@@ -4,8 +4,8 @@ namespace App\Service;
 
 use App\Repository\ImageRepository;
 
-class ImageService {
-
+class Image
+{
     private $imageRepository;
 
     public function __construct(ImageRepository $imageRepository) {

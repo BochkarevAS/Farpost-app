@@ -4,16 +4,15 @@ namespace App\Core;
 
 class Controller
 {
-    protected $container;
+    protected $view;
 
-    public function __construct(Container $container)
+    public function __construct(View $view)
     {
-        $this->container = $container;
+        $this->view = $view;
     }
 
     public function render($templateName, $data = [], $layoutName = 'layout/main')
     {
-        $view = $this->container->get(View::class);
-        $view->render($templateName, $data, $layoutName);
+        $this->view->render($templateName, $data, $layoutName);
     }
 }

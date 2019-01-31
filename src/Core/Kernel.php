@@ -2,6 +2,9 @@
 
 namespace App\Core;
 
+/**
+ * Годится моя школа
+ */
 class Kernel
 {
     protected $container;

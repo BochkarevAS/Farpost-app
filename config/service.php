@@ -1,8 +1,11 @@
 <?php
 
+/**
+ * Ну тоже имеет право на существование Или через метод bind
+ */
 return [
     \App\Core\Router::class => function($c) {
-        return new \App\Core\Router($c, include(ROOT . '/config/routes.php'));
+        return new \App\Core\Router($c, $c->get(\App\Middleware\AuthMiddleware::class), include(ROOT . '/config/routes.php'));
     },
     \App\Controller\UserController::class => function($c) {
         return new \App\Controller\UserController($c->get(\App\Core\View::class), $c->get(\App\Service\UserService::class));

@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Core\View;
 use App\Service\UserService;
 
+/**
+ * Нейминг это важно !!!
+ */
 class UserController {
 
     private $userService;
@@ -25,6 +28,9 @@ class UserController {
         if (isset($_POST['submit'])) {
             $code = $_POST['code'];
 
+            /**
+             * За такое порукам довать надо !!!
+             */
             if (!$this->userService->confirm($code)) {
                 $errors = 'Не верный КОД !!!';
             } else {
@@ -41,6 +47,12 @@ class UserController {
     public function actionRegistration() {
         $errors = false;
 
+        /**
+         * Ааааааааааааааааааааааа это пиздец !!!!!!!!!!!!!
+         * Зделать нармальный Request !!!!!!!!!!!!!!!!
+         * Да и логика пиздец
+         * Хотя бы DTO ...
+         */
         if (isset($_POST['submit'])) {
             $email = $_POST['email'];
             $password = $_POST['password'];
@@ -61,6 +73,10 @@ class UserController {
     public function actionLogin() {
         $errors = false;
 
+        /**
+         * Детский сад конечно
+         * Нет слов
+         */
         if (isset($_POST['submit'])) {
             $email = $_POST['email'];
             $password = $_POST['password'];

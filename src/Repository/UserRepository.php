@@ -4,6 +4,9 @@ namespace App\Repository;
 
 use App\Core\Db;
 
+/**
+ * Нэйминг конечно пиздец !!! Какой нахер User К хуям и Repository !!!
+ */
 class UserRepository {
 
     private $db;

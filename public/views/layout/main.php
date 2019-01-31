@@ -15,7 +15,7 @@
     <?= $content ?>
 <?php endif; ?>
 
-<script src="/resources/js/main.js"></script>
+<script src="/public/js/main.js"></script>
 
 </body>
 </html>

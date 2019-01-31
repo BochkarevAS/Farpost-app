@@ -2,8 +2,12 @@
 
 namespace App\Core;
 
-use Psr\Container\ContainerInterface;
+use App\Psr\ContainerInterface;
 
+/**
+ * Контенер в принцепе норм Можно кнонечно ленивую загрузку заебенить
+ * Для збора сервисов в методе get Но годится
+ */
 class Container implements ContainerInterface
 {
     protected $container = [];
@@ -13,21 +17,21 @@ class Container implements ContainerInterface
         $this->container = $container;
     }
 
-    public function get($name)
+    public function get($id)
     {
-        if ($this->has($name)) {
-            return $this->container[$name]($this);
+        if ($this->has($id)) {
+            return $this->container[$id]($this);
         }
 
-        return new $name();
+        return new $id();
     }
 
-    public function has($name)
+    public function has($id)
     {
-        return isset($this->container[$name]);
+        return isset($this->container[$id]);
     }
 
-    public function set($name, callable $callable)
+    public function bind($name, callable $callable)
     {
         $this->container[$name] = $callable;
     }

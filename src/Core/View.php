@@ -2,9 +2,12 @@
 
 namespace App\Core;
 
+/**
+ * В принцепе норм Мой вариант
+ */
 class View
 {
-    private $path = ROOT . '/resources/views/';
+    private $path = ROOT . '/public/views/';
 
     public function render($templateName, $data = [], $layoutName = 'layout/main')
     {

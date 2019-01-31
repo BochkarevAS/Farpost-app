@@ -22,6 +22,9 @@ class UserService {
         $this->sendEmail($email, $code);
     }
 
+    /**
+     * Пиздец
+     */
     public function login($password, $email) {
         $uid = $this->userRepository->getLogin($password, $email);
 
@@ -33,6 +36,9 @@ class UserService {
         return false;
     }
 
+    /**
+     * Пиздец
+     */
     public function valid($email, $password) {
         $errors = false;
 
@@ -47,6 +53,9 @@ class UserService {
         return $errors;
     }
 
+    /**
+     * Ваще пиздец
+     */
     public function checkExistUser($email) {
         return $this->userRepository->searchUser($email) ? false : true;
     }

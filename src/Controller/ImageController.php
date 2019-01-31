@@ -2,44 +2,60 @@
 
 namespace App\Controller;
 
-use App\Core\Container;
 use App\Core\Controller;
-use App\Service\Image;
+use App\Core\View;
+use App\Service\FileUploader;
 
+/**
+ * Вот нахуя стока контроллеров ???
+ */
 class ImageController extends Controller
 {
-    private $imageService;
+    private $uploader;
 
-    public function __construct(Container $container, Image $imageService)
+    /**
+     * При расширении контроллера можно сделать так что бы не вызывать родительский контроллер !!!
+     */
+    public function __construct(View $view, FileUploader $uploader)
     {
-        $this->imageService = $imageService;
+        $this->uploader = $uploader;
 
-        parent::__construct($container);
+        parent::__construct($view);
     }
 
-    public function actionIndex()
+    /**
+     * DI на методы не к чему
+     */
+    public function index()
     {
-        $uid = $this->imageService->checkAuth();
-        $images = $this->imageService->getImage($uid);
+        /**
+         * Получается размазывание тонким слоем по всему проекту
+         * Подход норм конечно но без фанатизма Контроллер -> Сервис -> Репозиторий
+         */
+        $uid = $this->image->checkAuth();
+        $images = $this->image->getImage($uid);
 
         return $this->render('site/image', [
             'images' => $images
         ]);
     }
 
-    public function actionAddAjaxImage()
+    public function create()
     {
-        $uid = $this->imageService->checkAuth();
-        $img = $this->imageService->insertImage($uid);
+        $uid = $this->image->checkAuth();
+        $img = $this->image->insertImage($uid);
 
         echo json_encode($img);
         die();
     }
 
-    public function actionShow($path, $id)
+    /**
+     * Использовать тайп хинты
+     */
+    public function show($path, $id)
     {
-        $this->imageService->checkAuth();
-        $img = $this->imageService->showImage($id);
+        $this->image->checkAuth();
+        $img = $this->image->showImage($id);
 
         return $this->render('site/show', [
             'img' => $img

@@ -1,13 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core;
 
 use App\Psr\ContainerInterface;
 
-/**
- * Контенер в принцепе норм Можно кнонечно ленивую загрузку заебенить
- * Для збора сервисов в методе get Но годится
- */
 class Container implements ContainerInterface
 {
     protected $container = [];

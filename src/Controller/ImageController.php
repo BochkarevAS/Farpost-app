@@ -6,9 +6,6 @@ use App\Core\Controller;
 use App\Core\View;
 use App\Service\FileUploader;
 
-/**
- * Вот нахуя стока контроллеров ???
- */
 class ImageController extends Controller
 {
     private $uploader;
@@ -16,11 +13,9 @@ class ImageController extends Controller
     /**
      * При расширении контроллера можно сделать так что бы не вызывать родительский контроллер !!!
      */
-    public function __construct(View $view, FileUploader $uploader)
+    public function __construct(FileUploader $uploader)
     {
         $this->uploader = $uploader;
-
-        parent::__construct($view);
     }
 
     /**

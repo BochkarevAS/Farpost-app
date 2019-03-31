@@ -9,9 +9,6 @@ spl_autoload_register('\App\Core\Kernel::classLoader');
 
 $container = require_once(ROOT . '/config/service.php');
 
-$kernel = new \App\Core\Kernel(new \App\Core\Container($container));
-$kernel->run();
-
-/**
- * В Core добавить класс Request и Response
- */
+$kernel  = new \App\Core\Kernel(new \App\Core\Container($container));
+$request = App\Core\Request::createRequest();
+$kernel->handle($request);

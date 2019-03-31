@@ -1,35 +1,66 @@
 <?php
 
-/**
- * Ну тоже имеет право на существование Или через метод bind
- */
+declare(strict_types=1);
+
+use App\Controller\ImageController;
+use App\Controller\MainController;
+use App\Core\Controller;
+use App\Core\Db;
+use App\Core\Router;
+use App\Middleware\AuthMiddleware;
+use App\Psr\ContainerInterface;
+use App\Repository\ImageRepository;
+use App\Repository\UserRepository;
+use App\Service\Image;
+use App\Service\User;
+
 return [
-    \App\Core\Router::class => function($c) {
-        return new \App\Core\Router($c, $c->get(\App\Middleware\AuthMiddleware::class), include(ROOT . '/config/routes.php'));
+    /**
+     * Core
+     */
+    Controller::class => function(ContainerInterface $c) {
+        $controller = new Controller();
+        $controller->setContainer($c);
+        return $controller;
     },
-    \App\Controller\UserController::class => function($c) {
-        return new \App\Controller\UserController($c->get(\App\Core\View::class), $c->get(\App\Service\UserService::class));
+    Router::class => function(ContainerInterface $c) {
+        return new Router($c, $c->get(AuthMiddleware::class), include(ROOT . '/config/routes.php'));
     },
-    \App\Controller\ImageController::class => function($c) {
-        return new \App\Controller\ImageController($c->get(\App\Core\View::class), $c->get(\App\Service\Image::class));
-    },
-    \App\Service\UserService::class => function($c) {
-        return new \App\Service\UserService($c->get(\App\Repository\UserRepository::class));
-    },
-    \App\Service\Image::class => function($c) {
-        return new \App\Service\Image($c->get(\App\Repository\ImageRepository::class));
-    },
-    \App\Repository\UserRepository::class => function($c) {
-        return new \App\Repository\UserRepository($c->get(\App\Core\Db::class));
-    },
-    \App\Repository\ImageRepository::class => function($c) {
-        return new \App\Repository\ImageRepository($c->get(\App\Core\Db::class));
-    },
-    \App\Core\Db::class => function($c) {
+    Db::class => function(ContainerInterface $c) {
         $dbConfig = include(ROOT . '/config/db_config.php');
-        return new \App\Core\Db($dbConfig['host'], $dbConfig['dbname'], $dbConfig['user'], $dbConfig['password']);
+        return new Db($dbConfig['host'], $dbConfig['dbname'], $dbConfig['user'], $dbConfig['password']);
     },
-    \App\Middleware\AuthMiddleware::class => function($c) {
-        return new \App\Middleware\AuthMiddleware();
-    }
+    /**
+     * Controller
+     */
+    MainController::class => function(ContainerInterface $c) {
+        return new MainController($c->get(User::class));
+    },
+    ImageController::class => function(ContainerInterface $c) {
+        return new ImageController($c->get(Image::class));
+    },
+    /**
+     * Service
+     */
+    User::class => function(ContainerInterface $c) {
+        return new User($c->get(UserRepository::class));
+    },
+    Image::class => function(ContainerInterface $c) {
+        return new Image($c->get(ImageRepository::class));
+    },
+    /**
+     * Repository
+     */
+    UserRepository::class => function(ContainerInterface $c) {
+        return new UserRepository($c->get(Db::class));
+    },
+    ImageRepository::class => function(ContainerInterface $c) {
+        return new ImageRepository($c->get(Db::class));
+    },
+    /**
+     * Middleware
+     */
+    AuthMiddleware::class => function(ContainerInterface $c) {
+        return new AuthMiddleware();
+    },
 ];

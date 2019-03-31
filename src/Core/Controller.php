@@ -1,18 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core;
+
+use App\Psr\ContainerInterface;
 
 class Controller
 {
-    protected $view;
+    /**
+     * @var $container Container
+     */
+    protected $container;
 
-    public function __construct(View $view)
+    public function setContainer(ContainerInterface $container)
     {
-        $this->view = $view;
+        $this->container = $container;
     }
 
     public function render($templateName, $data = [], $layoutName = 'layout/main')
     {
-        $this->view->render($templateName, $data, $layoutName);
+        return $this->container->get('view')->render($templateName, $data, $layoutName);
     }
 }

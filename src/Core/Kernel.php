@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core;
 
-/**
- * Годится моя школа
- */
 class Kernel
 {
     protected $container;
@@ -18,7 +17,7 @@ class Kernel
     {
         $class = strtr($class, [
             'App' => 'src',
-            '\\' => DIRECTORY_SEPARATOR
+            '\\'  => DIRECTORY_SEPARATOR
         ]);
 
         $path = ROOT . DIRECTORY_SEPARATOR . $class . '.php';
@@ -28,10 +27,15 @@ class Kernel
         }
     }
 
-    public function run()
+    public function handle(Request $request)
     {
+        /** @var Router $routes */
         $routes = $this->container->get(Router::class);
+        $params = $routes->matchRequest($request);
 
-        echo $routes->run();
+        var_dump($params);
+        die;
+
+        echo $routes->run($request);
     }
 }

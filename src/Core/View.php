@@ -1,10 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core;
 
-/**
- * В принцепе норм Мой вариант
- */
 class View
 {
     private $path = ROOT . '/public/views/';

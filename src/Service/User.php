@@ -1,18 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Repository\UserRepository;
 
-class UserService {
-
+class User
+{
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository) {
+    public function __construct(UserRepository $userRepository)
+    {
         $this->userRepository = $userRepository;
     }
 
-    public function registration($password, $email) {
+    public function registration($password, $email)
+    {
         $time = new \DateTimeImmutable('now', new \DateTimeZone('+0000'));
 
         $hash = password_hash($this->createSecretString($email, $password, $time), PASSWORD_DEFAULT);
@@ -25,7 +29,8 @@ class UserService {
     /**
      * Пиздец
      */
-    public function login($password, $email) {
+    public function login($password, $email)
+    {
         $uid = $this->userRepository->getLogin($password, $email);
 
         if ($uid) {

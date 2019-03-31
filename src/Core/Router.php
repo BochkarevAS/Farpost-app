@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Core;
 
 use App\Middleware\AuthMiddleware;
+use App\Psr\ContainerInterface;
 
 class Router
 {
@@ -12,40 +15,55 @@ class Router
 
     private $routes;
 
-    public function __construct(Container $container, AuthMiddleware $middleware, $routes)
+    public function __construct(ContainerInterface $container, AuthMiddleware $middleware, $routes)
     {
         $this->container  = $container;
         $this->middleware = $middleware;
         $this->routes     = $routes;
     }
 
-    public function run()
+    public function matchRequest(Request $request)
     {
-        $uri = trim($_SERVER['REQUEST_URI'], '/');
+        $uri = $request->getRequestUri();
 
         foreach ($this->routes as $route => $callable) {
+            $pattern = $this->match($route);
 
-            /**
-             * Роутинг ещё можно улучшить !!!
-             */
-            if (preg_match("~$route~", $uri, $matches)) {
-                $actions = ['user/registration', 'user/login', 'user/confirm'];
+            if (preg_match($pattern, $uri, $matches)) {
+                $token = (null == $matches) ? $matches[1] : '';
 
-                if (in_array($uri, $actions)) {
-                    $this->middleware->handle();
-                }
+                $parameters = [
+                    '_controller' => $callable[0],
+                    '_method'     => $callable[1],
+                    '_token'      => $token,
+                ];
 
-                $callable['_controller'] = $this->container->get($callable['_controller']);
-
-                $result = call_user_func_array($callable, $matches);
-
-                return $result;
+                return $parameters;
             }
         }
 
-        /**
-         * Кастомные исключения Не не слышал
-         */
+        return [];
+    }
+
+    private function match(string $route)
+    {
+        $flag = preg_match('/\{(.+?)\}/', $route, $matches);
+
+        if (empty($flag)) {
+            return "~$route~";
+        }
+
+        $token   = "{" . $matches[1] . "}";
+        $replace = "(?P<$matches[1]>[^/]++)";
+
+        $pattern = str_replace("$token", $replace, $route);
+
+        return "#^$pattern$#s";
+    }
+
+    public function run(Request $request)
+    {
+
         throw new \HttpException('Not found', 404);
     }
 }

@@ -1,28 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
-use App\Core\View;
-use App\Service\UserService;
+use App\Core\Controller;
+use App\Service\User;
 
-/**
- * Нейминг это важно !!!
- */
-class UserController {
+class MainController extends Controller
+{
+    private $user;
 
-    private $userService;
-    private $view;
-
-    public function __construct(View $view, UserService $userService) {
-        $this->userService = $userService;
-        $this->view = $view;
+    public function __construct(User $user)
+    {
+        $this->user = $user;
     }
 
-    public function actionIndex() {
-        return $this->view->render('layout/main');
+    public function index()
+    {
+        return $this->render('layout/main');
     }
 
-    public function actionConfirm() {
+    public function confirm()
+    {
         $errors = false;
 
         if (isset($_POST['submit'])) {

@@ -12,10 +12,12 @@ class Request
 
     private $requestUri;
 
+    public $attributes = [];
+
     public function __construct(array $query = [], array $request = [])
     {
-        $this->query   = $query;
-        $this->request = $request;
+        $this->query      = $query;
+        $this->request    = $request;
     }
 
     public static function createRequest()

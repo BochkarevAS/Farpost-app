@@ -13,5 +13,5 @@ return [
     'image/index'         => [ImageController::class, 'index'],
     'image/create'        => [ImageController::class, 'create'],
     'image/show/([0-9]+)' => [ImageController::class, 'show'],
-    '/{id}'               => [MainController::class, 'index']
+    '/{a}/{b}'            => [MainController::class, 'index']
 ];

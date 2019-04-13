@@ -22,47 +22,92 @@ class Router
         $this->routes     = $routes;
     }
 
+    /**
+     * Обробатывает запросы.
+     * Вернёт атрибуты. Например:
+     * array(3) {
+     *      ["_controller"]=> "App\Controller\MainController"
+     *      ["_method"]    => "index"
+     *      ["attributes"] => { ["a"]=> "1" ["b"]=>"17" }
+     * }
+     */
     public function matchRequest(Request $request)
     {
-        $uri = $request->getRequestUri();
-
         foreach ($this->routes as $route => $callable) {
-            $pattern = $this->match($route);
+            $matches = $this->match($request, $route);
 
-            if (preg_match($pattern, $uri, $matches)) {
-                $token = (null == $matches) ? $matches[1] : '';
-
+            if ($matches) {
                 $parameters = [
                     '_controller' => $callable[0],
-                    '_method'     => $callable[1],
-                    '_token'      => $token,
+                    '_method'     => $callable[1]
                 ];
 
-                return $parameters;
+                foreach ($matches as $key => $value) {
+                    if (is_string($key)) {
+                        $parameters['attributes'][$key] = $matches[$key];
+                    }
+                }
+
+                $request->attributes = $parameters;
+
+                return;
             }
         }
 
-        return [];
+        throw new \HttpException('Not found', 404);
     }
 
-    private function match(string $route)
+    /**
+     * Позволяет работать с запросами вида /index/{a}/{b}
+     */
+    private function match(Request $request, string $route)
     {
-        $flag = preg_match('/\{(.+?)\}/', $route, $matches);
+        $params = [];
+        $uri    = $request->getRequestUri();
 
-        if (empty($flag)) {
-            return "~$route~";
+        preg_match_all('/\{([^}]+)\}/', $route, $matches);
+
+        foreach (array_flip($matches[1]) as $key => $value) {
+            $params[$key] = $matches[0][$value];
         }
 
-        $token   = "{" . $matches[1] . "}";
-        $replace = "(?P<$matches[1]>[^/]++)";
+        foreach ($params as $key => $value) {
+            $route = str_replace($value, "(?P<$key>[^/]++)", $route);
+        }
 
-        $pattern = str_replace("$token", $replace, $route);
+        preg_match("#^$route$#s", $uri, $matches);
 
-        return "#^$pattern$#s";
+        return $matches;
     }
 
     public function run(Request $request)
     {
+        if (!$class = $request->attributes['_controller']) {
+            throw new \InvalidArgumentException('Not controller found');
+        }
+
+        if (!$method = $request->attributes['_method']) {
+            throw new \InvalidArgumentException('Not method found');
+        }
+
+//        var_dump(class_exists($controller));
+//        die;
+
+        if (class_exists($class)) {
+//            $controller = new $class;
+        }
+
+        $controller = new $class;
+
+        if (is_array($controller)) {
+            $r = new \ReflectionMethod($controller[0], $controller[1]);
+        };
+
+//        var_dump($controller);
+        var_dump($r->getParameters());
+        die;
+
+//        $response = call_user_func_array($controller, $arguments);
 
         throw new \HttpException('Not found', 404);
     }

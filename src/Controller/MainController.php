@@ -11,12 +11,16 @@ class MainController extends Controller
 {
     private $user;
 
-    public function __construct(User $user)
+//    public function __construct(User $user)
+//    {
+//        $this->user = $user;
+//    }
+
+    public function __construct()
     {
-        $this->user = $user;
     }
 
-    public function index()
+    public function index($a, $b)
     {
         return $this->render('layout/main');
     }

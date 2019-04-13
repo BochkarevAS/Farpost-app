@@ -29,11 +29,15 @@ class Kernel
 
     public function handle(Request $request)
     {
-        /** @var Router $routes */
-        $routes = $this->container->get(Router::class);
-        $params = $routes->matchRequest($request);
 
-        var_dump($params);
+        /** @var Router $route */
+        $route = $this->container->get(Router::class);
+        $route->matchRequest($request);
+        $route->run($request);
+
+
+
+        var_dump($request);
         die;
 
         echo $routes->run($request);

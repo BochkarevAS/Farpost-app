@@ -18,15 +18,11 @@ class SecurityController extends Controller
         if ($user->isSubmitted() && !$user->isValid()) {
             $auth = $this->container->get(Auth::class);
 
-            if ($auth->checkExist($user) && $auth->checkLogin($user)) {
-                return $this->render('security/login',[
-                    'errors' => $user->errors
-                ]);
+            if (!($auth->checkExist($user) && $auth->checkLogin($user))) {
+                $this->setSession('user', md5(uniqid()));
+
+                $this->redirectToRoute('/');
             }
-
-            $this->setSession('user', md5(uniqid()));
-
-            $this->redirectToRoute('/');
         }
 
         return $this->render('security/login',[

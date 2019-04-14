@@ -6,9 +6,9 @@ namespace App\Core;
 
 class View
 {
-    private $path = ROOT . '/public/views/';
+    private $path = ROOT . '/templates/';
 
-    public function render($templateName, $data = [], $layoutName = 'layout/main')
+    public function render($templateName, $data = [], $layoutName = 'layout')
     {
         $data['content'] = $this->_render($templateName, $data);
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Core\Controller;
+use App\Core\Request;
 use App\Service\User;
 
 class MainController extends Controller
@@ -16,11 +17,7 @@ class MainController extends Controller
 //        $this->user = $user;
 //    }
 
-    public function __construct()
-    {
-    }
-
-    public function index($a, $b)
+    public function index($a, $b, Request $request)
     {
         return $this->render('layout/main');
     }

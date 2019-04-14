@@ -16,8 +16,8 @@ class Request
 
     public function __construct(array $query = [], array $request = [])
     {
-        $this->query      = $query;
-        $this->request    = $request;
+        $this->query   = $query;
+        $this->request = $request;
     }
 
     public static function createRequest()
@@ -27,7 +27,7 @@ class Request
 
     public function query(string $key)
     {
-        if (in_array($key, $this->query)) {
+        if (array_key_exists($key, $this->query)) {
             return $this->query[$key];
         }
 
@@ -36,11 +36,31 @@ class Request
 
     public function request(string $key)
     {
-        if (in_array($key, $this->request)) {
+        if (array_key_exists($key, $this->request)) {
             return $this->request[$key];
         }
 
         return null;
+    }
+
+    public function getSession()
+    {
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+
+        return $_SESSION;
+    }
+
+    public function setSession(string $key, string $value)
+    {
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+
+        $_SESSION[$key] = $value;
+
+        return $_SESSION;
     }
 
     public function getRequestUri()

@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 use App\Controller\ImageController;
 use App\Controller\MainController;
-use App\Core\Controller;
 use App\Core\Db;
+use App\Core\Response;
 use App\Core\Router;
+use App\Core\View;
 use App\Middleware\AuthMiddleware;
 use App\Psr\ContainerInterface;
 use App\Repository\ImageRepository;
 use App\Repository\UserRepository;
+use App\Service\Auth;
 use App\Service\Image;
 use App\Service\User;
 
 return [
+
     /**
      * Core
      */
-    Controller::class => function(ContainerInterface $c) {
-        $controller = new Controller();
-        $controller->setContainer($c);
-        return $controller;
-    },
     Router::class => function(ContainerInterface $c) {
         return new Router($c, $c->get(AuthMiddleware::class), include(ROOT . '/config/routes.php'));
     },
@@ -30,6 +28,13 @@ return [
         $dbConfig = include(ROOT . '/config/db_config.php');
         return new Db($dbConfig['host'], $dbConfig['dbname'], $dbConfig['user'], $dbConfig['password']);
     },
+    Response::class => function(ContainerInterface $c) {
+        return new Response();
+    },
+    View::class => function(ContainerInterface $c) {
+        return new View();
+    },
+
     /**
      * Controller
      */
@@ -39,15 +44,20 @@ return [
     ImageController::class => function(ContainerInterface $c) {
         return new ImageController($c->get(Image::class));
     },
+
     /**
      * Service
      */
+    Auth::class => function(ContainerInterface $c) {
+        return new Auth($c);
+    },
     User::class => function(ContainerInterface $c) {
         return new User($c->get(UserRepository::class));
     },
     Image::class => function(ContainerInterface $c) {
         return new Image($c->get(ImageRepository::class));
     },
+
     /**
      * Repository
      */
@@ -57,6 +67,7 @@ return [
     ImageRepository::class => function(ContainerInterface $c) {
         return new ImageRepository($c->get(Db::class));
     },
+
     /**
      * Middleware
      */

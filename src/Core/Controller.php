@@ -18,8 +18,23 @@ class Controller
         $this->container = $container;
     }
 
-    public function render($templateName, $data = [], $layoutName = 'layout/main')
+    public function getSession()
     {
-        return $this->container->get('view')->render($templateName, $data, $layoutName);
+        return $this->container->get(Request::class)->getSession();
+    }
+
+    public function setSession(string $key, string $value)
+    {
+        return $this->container->get(Request::class)->setSession($key, $value);
+    }
+
+    public function redirectToRoute(string $route = '/')
+    {
+        return $this->container->get(Response::class)->redirectToRoute($route);
+    }
+
+    public function render($templateName, $data = [], $layoutName = 'layout')
+    {
+        return $this->container->get(View::class)->render($templateName, $data, $layoutName);
     }
 }

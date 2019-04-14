@@ -26,9 +26,10 @@ class Router
      * Обробатывает запросы.
      * Вернёт атрибуты. Например:
      * array(3) {
-     *      ["_controller"]=> "App\Controller\MainController"
-     *      ["_method"]    => "index"
-     *      ["attributes"] => { ["a"]=> "1" ["b"]=>"17" }
+     *      ["_controller"] => "App\Controller\MainController"
+     *      ["_method"]     => "index"
+     *      ["a"]           => "1"
+     *      ["b"]           => "17"
      * }
      */
     public function matchRequest(Request $request)
@@ -44,7 +45,7 @@ class Router
 
                 foreach ($matches as $key => $value) {
                     if (is_string($key)) {
-                        $parameters['attributes'][$key] = $matches[$key];
+                        $parameters[$key] = $matches[$key];
                     }
                 }
 
@@ -82,33 +83,58 @@ class Router
 
     public function run(Request $request)
     {
-        if (!$class = $request->attributes['_controller']) {
+        $callable  = $this->createController($request);
+        $arguments = $this->createArgument($request);
+
+        $response  = call_user_func_array($callable, $arguments);
+
+        return $response;
+    }
+
+    /**
+     * Создаёт аргументы
+     */
+    private function createArgument(Request $request)
+    {
+        $arguments  = [];
+        $attributes = $request->attributes;
+
+        $r = new \ReflectionMethod($attributes['_controller'], $attributes['_method']);
+
+        foreach ($r->getParameters() as $param) {
+            if (array_key_exists($param->name, $attributes)) {
+                $arguments[] = $attributes[$param->name];
+            } elseif ($param->getClass() && $param->getClass()->isInstance($request)) {
+                $arguments[] = $request;
+            } else {
+                throw new \RuntimeException('Not arguments found');
+            }
+        }
+
+        return $arguments;
+    }
+
+    /**
+     * Создаёт контроллер
+     */
+    private function createController(Request $request)
+    {
+        $attributes = $request->attributes;
+
+        if (!$controller = $attributes['_controller']) {
             throw new \InvalidArgumentException('Not controller found');
         }
 
-        if (!$method = $request->attributes['_method']) {
+        if (!$method = $attributes['_method']) {
             throw new \InvalidArgumentException('Not method found');
         }
 
-//        var_dump(class_exists($controller));
-//        die;
+        $controller = new $controller;
 
-        if (class_exists($class)) {
-//            $controller = new $class;
+        if ($controller instanceof \App\Core\Controller) {
+            $controller->setContainer($this->container);
         }
 
-        $controller = new $class;
-
-        if (is_array($controller)) {
-            $r = new \ReflectionMethod($controller[0], $controller[1]);
-        };
-
-//        var_dump($controller);
-        var_dump($r->getParameters());
-        die;
-
-//        $response = call_user_func_array($controller, $arguments);
-
-        throw new \HttpException('Not found', 404);
+        return [$controller, $method];
     }
 }

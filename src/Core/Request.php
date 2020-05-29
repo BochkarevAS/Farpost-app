@@ -6,9 +6,9 @@ namespace App\Core;
 
 class Request
 {
-    private $request;
+    private $request = [];
 
-    private $query;
+    private $query = [];
 
     private $requestUri;
 
@@ -25,22 +25,14 @@ class Request
         return new static($_GET, $_POST);
     }
 
-    public function query(string $key)
+    public function query(string $key): string
     {
-        if (array_key_exists($key, $this->query)) {
-            return $this->query[$key];
-        }
-
-        return null;
+        return $this->query[$key] ?? '';
     }
 
-    public function request(string $key)
+    public function request(string $key): string
     {
-        if (array_key_exists($key, $this->request)) {
-            return $this->request[$key];
-        }
-
-        return null;
+        return $this->request[$key] ?? '';
     }
 
     public function getSession()
@@ -72,7 +64,7 @@ class Request
         return $this->requestUri;
     }
 
-    protected function prepareRequestUri()
+    protected function prepareRequestUri(): string
     {
         $uri = $_SERVER['REQUEST_URI'];
 

@@ -24,9 +24,7 @@ class FileUploader
         $file = self::UPLOAD_FILE . md5(uniqid()) . $ext;
 
         if (move_uploaded_file($_FILES['file']['tmp_name'], $file)) {
-            /**
-             * Убрать отсюда эту херню и зделать нормально !!!!!!!!!!!!!!!!!
-             */
+
             $sql = "INSERT INTO image (img, uid) VALUES (:img, :uid) RETURNING id, img";
 
             $result = $this->db->query($sql, [

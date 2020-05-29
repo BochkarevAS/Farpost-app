@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Exceptions\InvalidArgumentException;
+use App\Exceptions\NotFoundException;
 use App\Middleware\AuthMiddleware;
 use App\Psr\ContainerInterface;
 
@@ -31,8 +33,11 @@ class Router
      *      ["a"]           => "1"
      *      ["b"]           => "17"
      * }
+     *
+     * @return $route - название маршрута из запроса
+     * @throws NotFoundException
      */
-    public function matchRequest(Request $request)
+    public function matchRequest(Request $request): string
     {
         foreach ($this->routes as $route => $callable) {
             $matches = $this->match($request, $route);
@@ -51,17 +56,17 @@ class Router
 
                 $request->attributes = $parameters;
 
-                return;
+                return $route;
             }
         }
 
-        throw new \HttpException('Not found', 404);
+        throw new NotFoundException('Страница не найдена!', 404);
     }
 
     /**
      * Позволяет работать с запросами вида /index/{a}/{b}
      */
-    private function match(Request $request, string $route)
+    public function match(Request $request, string $route): array
     {
         $params = [];
         $uri    = $request->getRequestUri();
@@ -81,20 +86,21 @@ class Router
         return $matches;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function run(Request $request)
     {
         $callable  = $this->createController($request);
         $arguments = $this->createArgument($request);
 
-        $response  = call_user_func_array($callable, $arguments);
-
-        return $response;
+        return call_user_func_array($callable, $arguments);
     }
 
     /**
      * Создаёт аргументы
      */
-    private function createArgument(Request $request)
+    private function createArgument(Request $request): array
     {
         $arguments  = [];
         $attributes = $request->attributes;
@@ -116,17 +122,19 @@ class Router
 
     /**
      * Создаёт контроллер
+     *
+     * @throws InvalidArgumentException
      */
-    private function createController(Request $request)
+    private function createController(Request $request): array
     {
         $attributes = $request->attributes;
 
         if (!$controller = $attributes['_controller']) {
-            throw new \InvalidArgumentException('Not controller found');
+            throw new InvalidArgumentException('Контроллер не найден', 500);
         }
 
         if (!$method = $attributes['_method']) {
-            throw new \InvalidArgumentException('Not method found');
+            throw new InvalidArgumentException('Метод не найден', 500);
         }
 
         $controller = new $controller;

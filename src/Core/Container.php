@@ -15,7 +15,7 @@ class Container implements ContainerInterface
         $this->container = $container;
     }
 
-    public function get($id)
+    public function get(string $id)
     {
         if ($this->has($id)) {
             return $this->container[$id]($this);
@@ -24,12 +24,12 @@ class Container implements ContainerInterface
         return new $id();
     }
 
-    public function has($id)
+    public function has(string $id): bool
     {
         return isset($this->container[$id]);
     }
 
-    public function bind($name, callable $callable)
+    public function bind($name, callable $callable): void
     {
         $this->container[$name] = $callable;
     }

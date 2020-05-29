@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Exceptions\InvalidArgumentException;
+use App\Exceptions\NotFoundException;
+
 class Kernel
 {
     protected $container;
 
-    function __construct(Container $container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
-    public static function classLoader($class)
+    public static function classLoader($class): void
     {
         $class = strtr($class, [
             'App' => 'src',
@@ -27,7 +30,11 @@ class Kernel
         }
     }
 
-    public function handle(Request $request)
+    /**
+     * @throws NotFoundException
+     * @throws InvalidArgumentException
+     */
+    public function handle(Request $request): void
     {
         /** @var Router $route */
         $route = $this->container->get(Router::class);

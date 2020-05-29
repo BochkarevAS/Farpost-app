@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 return [
     'host'     => 'localhost',
-    'dbname'   => 'farpost',
+    'dbname'   => 'frame',
     'user'     => 'postgres',
     'password' => 'root'
 ];

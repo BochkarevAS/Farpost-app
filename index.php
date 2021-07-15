@@ -24,4 +24,7 @@ try {
 } catch (\App\Exceptions\InvalidArgumentException $e) {
     $view = new \App\Core\View();
     echo $view->render('errors/500', ['error' => $e->getMessage()]);
+} catch (\App\Exceptions\FileException $e) {
+    $view = new \App\Core\View();
+    echo $view->render('errors/500', ['error' => $e->getMessage()]);
 }

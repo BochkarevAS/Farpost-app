@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Exceptions\NotFoundException;
 use App\Form\UserType;
 use App\Service\UserService;
+use App\Exceptions\FileException;
 
 class UserController extends Controller
 {
@@ -40,6 +41,7 @@ class UserController extends Controller
 
     /**
      * @throws NotFoundException
+     * @throws FileException
      */
     public function edit(Request $request, int $id)
     {
@@ -50,13 +52,20 @@ class UserController extends Controller
         }
 
         $data = new UserType();
-        $form = $data->handleRequest($request);
+        $form = $data->handleRequest($request, $id);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = new User();
             $user->setNickname($data->nickname);
             $user->setPassword($data->password);
             $user->setEmail($data->email);
+
+            if ($data->file) {
+                $this->uploaded()->delete($user->getAvatar());
+
+                $avatar = $this->uploaded()->upload();
+                $user->setAvatar($avatar);
+            }
+
             $user->save();
 
             $this->redirectToRoute('/user/' . $user->getId() . '/edit');
@@ -68,6 +77,9 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @throws FileException
+     */
     public function create(Request $request)
     {
         $data = new UserType();
@@ -86,6 +98,12 @@ class UserController extends Controller
             $user->setToken($service->token());
             $user->setIsConfirmed(false);
             $user->setRole('user');
+
+            if ($data->file) {
+                $avatar = $this->uploaded()->upload();
+                $user->setAvatar($avatar);
+            }
+
             $user->save();
 
             $this->redirectToRoute('/user/list');
@@ -108,6 +126,7 @@ class UserController extends Controller
             throw new NotFoundException();
         }
 
+        $this->uploaded()->delete($user->getAvatar());
         $user->delete();
 
         $this->redirectToRoute('/user/list');

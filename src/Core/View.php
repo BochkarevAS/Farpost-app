@@ -6,7 +6,7 @@ namespace App\Core;
 
 class View
 {
-    private $path = ROOT . '/templates/';
+    private string $path = ROOT . '/templates/';
 
     public function render($templateName, $data = [], $layoutName = 'layout')
     {

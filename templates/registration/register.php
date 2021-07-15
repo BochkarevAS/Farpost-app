@@ -7,17 +7,16 @@
 <?php endif; ?>
 
 <div style="text-align: center;">
-    <h1>Создать пользователя</h1>
+    <h1>Регестрация</h1>
 
-    <form action="/user/create" method="post" enctype="multipart/form-data">
+    <form method="post" action="/registration/register">
         <label>Nickname <input type="text" name="nickname"></label>
         <br><br>
         <label>Email <input type="text" name="email"></label>
         <br><br>
-        <label>Password <input type="text" name="password"></label>
+        <label>Password <input type="password" name="password"></label>
         <br><br>
-        <label>Image <input type="file" name="file"></label>
-        <br><br>
-        <input type="submit" name="submit" value="Создать">
+        <label>Password repeat<input type="password" name="repeat"></label>
+        <input type="submit" name="submit" value="Регестрация">
     </form>
 </div>

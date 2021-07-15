@@ -6,13 +6,13 @@ namespace App\Core;
 
 class Request
 {
-    private $request = [];
+    private array $request = [];
 
-    private $query = [];
+    private array $query = [];
 
-    private $requestUri;
+    private ?string $requestUri = null;
 
-    public $attributes = [];
+    public array $attributes = [];
 
     public function __construct(array $query = [], array $request = [])
     {
@@ -33,6 +33,11 @@ class Request
     public function request(string $key): string
     {
         return $this->request[$key] ?? '';
+    }
+
+    public function file(string $key): ?string
+    {
+        return $_FILES[$key]['name'] ?? null;
     }
 
     public function getSession()

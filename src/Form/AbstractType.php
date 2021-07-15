@@ -8,9 +8,9 @@ use App\Core\Request;
 
 abstract class AbstractType implements FormInterface
 {
-    protected $submitted = false;
+    protected ?string $submitted = null;
 
-    protected $errors = [];
+    protected array $errors = [];
 
     public function isValid(): bool
     {

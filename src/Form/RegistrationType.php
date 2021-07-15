@@ -7,25 +7,22 @@ namespace App\Form;
 use App\Core\Request;
 use App\Entity\User;
 
-class UserType extends AbstractType
+class RegistrationType extends AbstractType
 {
-    public ?int $id = null;
-
     public string $nickname;
 
     public string $email;
 
-    public ?string $file;
-
     public string $password;
 
-    public function handleRequest(Request $request = null, int $id = null)
+    public string $repeat;
+
+    public function handleRequest(Request $request = null)
     {
-        $this->id        = $id;
         $this->nickname  = $request->request('nickname');
         $this->email     = $request->request('email');
-        $this->file      = $request->file('file');
         $this->password  = $request->request('password');
+        $this->repeat    = $request->request('repeat');
         $this->submitted = $request->request('submit');
 
         if ($this->submitted) {
@@ -49,20 +46,16 @@ class UserType extends AbstractType
             $this->errors[] = 'Пароль не может быть меньше трёх символов !!!';
         }
 
-        $user = User::findOneByColumn('nickname', $this->nickname);
-
-        if (null !== $user) {
-            if ($this->id !== $user->getId()) {
-                $this->errors[] = 'Пользователь с таким nickname уже существует';
-            }
+        if ($this->password !== $this->repeat) {
+            $this->errors[] = 'Пароль не совпадает !!!';
         }
 
-        $user = User::findOneByColumn('email', $this->email);
+        if (null !== User::findOneByColumn('nickname', $this->nickname)) {
+            $this->errors[] = 'Пользователь с таким nickname уже существует';
+        }
 
-        if (null !== $user) {
-            if ($this->id !== $user->getId()) {
-                $this->errors[] = 'Пользователь с таким email уже существует';
-            }
+        if (null !== User::findOneByColumn('email', $this->email)) {
+            $this->errors[] = 'Пользователь с таким email уже существует';
         }
     }
 }

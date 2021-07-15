@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace App\Core;
 
 use App\Psr\ContainerInterface;
+use App\Service\UploadedFile;
 
 class Controller
 {
-    /**
-     * @var $container Container
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
     public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;
+    }
+
+    public function uploaded(): UploadedFile
+    {
+        return $this->container->get(UploadedFile::class);
     }
 
     public function getSession()

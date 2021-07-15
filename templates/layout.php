@@ -3,15 +3,13 @@
 <head></head>
 
 <body>
-
-    <?php if (isset($_SESSION['user'])) : ?>
-
-        <?= $_SESSION['user'] ?>
+    <?php if (isset($_SESSION['username'])) : ?>
+        <?= $_SESSION['username'] ?>
 
         <a href="/security/logout">Выход</a>
     <?php else : ?>
         <div>
-            <a href="/security/registration">Регестрация</a>
+            <a href="/registration/register">Регестрация</a>
             <a href="/security/login">Вход</a>
         </div>
     <?php endif; ?>

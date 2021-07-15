@@ -8,10 +8,7 @@ use App\Core\Db;
 
 abstract class ActiveRecord
 {
-    /**
-     * @var int
-     */
-    protected $id;
+    protected ?int $id = null;
 
     public function __set(string $name, $value)
     {

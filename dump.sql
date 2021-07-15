@@ -12,10 +12,11 @@ CREATE DATABASE frame
 
 CREATE TABLE public.users
 (
-  id integer NOT NULL DEFAULT nextval('users_id_seq'::regclass),
+  id serial,
   nickname text,
   email text,
   password text,
+  avatar text,
   token text,
   is_confirmed boolean,
   role text,

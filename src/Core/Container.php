@@ -8,7 +8,7 @@ use App\Psr\ContainerInterface;
 
 class Container implements ContainerInterface
 {
-    protected $container = [];
+    protected array $container = [];
 
     public function __construct($container)
     {

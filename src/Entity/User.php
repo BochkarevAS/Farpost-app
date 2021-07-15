@@ -6,45 +6,23 @@ namespace App\Entity;
 
 class User extends ActiveRecord
 {
-    /**
-     * @var string
-     */
-    protected $nickname;
+    protected string $nickname;
 
-    /**
-     * @var string
-     */
-    protected $email;
+    protected string $email;
 
-    /**
-     * @var string
-     */
-    protected $password;
+    protected string $password;
 
-    /**
-     * @var string
-     */
-    protected $token;
+    protected ?string $token = null;
 
-    /**
-     * @var bool
-     */
-    protected $isConfirmed;
+    protected ?bool $isConfirmed = false;
 
-    /**
-     * @var string
-     */
-    protected $role;
+    protected ?string $role = null;
 
-    /**
-     * @var string
-     */
-    protected $createdAt;
+    protected ?string $avatar = null;
 
-    /**
-     * @var string
-     */
-    protected $updatedAt;
+    protected ?string $createdAt = null;
+
+    protected ?string $updatedAt = null;
 
     public function getNickname(): string
     {
@@ -76,7 +54,7 @@ class User extends ActiveRecord
         $this->password = $password;
     }
 
-    public function getToken(): string
+    public function getToken(): ?string
     {
         return $this->token;
     }
@@ -86,7 +64,7 @@ class User extends ActiveRecord
         $this->token = $token;
     }
 
-    public function isConfirmed(): bool
+    public function isConfirmed(): ?bool
     {
         return $this->isConfirmed;
     }
@@ -96,7 +74,7 @@ class User extends ActiveRecord
         $this->isConfirmed = $isConfirmed;
     }
 
-    public function getRole(): string
+    public function getRole(): ?string
     {
         return $this->role;
     }
@@ -106,12 +84,22 @@ class User extends ActiveRecord
         $this->role = $role;
     }
 
-    public function getCreatedAt(): string
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+
+    public function getCreatedAt(): ?string
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): ?string
     {
         return $this->updatedAt;
     }

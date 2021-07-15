@@ -11,13 +11,13 @@ use App\Psr\ContainerInterface;
 
 class Router
 {
-    private $container;
+    private ContainerInterface $container;
 
-    private $middleware;
+    private AuthMiddleware $middleware;
 
-    private $routes;
+    private array $routes = [];
 
-    public function __construct(ContainerInterface $container, AuthMiddleware $middleware, $routes)
+    public function __construct(ContainerInterface $container, AuthMiddleware $middleware, array $routes)
     {
         $this->container  = $container;
         $this->middleware = $middleware;

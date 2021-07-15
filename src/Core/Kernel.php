@@ -6,10 +6,11 @@ namespace App\Core;
 
 use App\Exceptions\InvalidArgumentException;
 use App\Exceptions\NotFoundException;
+use App\Psr\ContainerInterface;
 
 class Kernel
 {
-    protected $container;
+    protected ContainerInterface $container;
 
     public function __construct(Container $container)
     {
